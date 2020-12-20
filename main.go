@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+	"github.com/howeyc/gopass"
 	"log"
 	"mp.52tt.com/meican/api"
 	"mp.52tt.com/meican/config"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -19,16 +21,19 @@ func main() {
 	pd := flag.String("pd", "", "prefer_dish")
 	pr := flag.String("pr", "", "prefer_restaurant")
 	flag.Parse()
+
+
 	//log.Printf("%v", *f)
 	if *f != "17" && *f != "18" && *f != "19" ||
-		*u == "" || *p == "" {
+		*u == "" {
 		log.Println("=========================================")
 		log.Println("Usage: ")
-		log.Println("\tmeican_robot -u ***@qw.com -p 123123 -f 17")
-		log.Println("\tmeican_robot -u ***@qw.com -p 123123 -f 18 -dd \"辣|8勺\"")
-		log.Println("\tmeican_robot -u ***@qw.com -p 123123 -f 19 -dr \"抄手|丽华\"")
-		log.Println("\tmeican_robot -u ***@qw.com -p 123123 -f 18 -dd \"辣|8勺\"  -dr \"抄手|丽华\" -pd \"猪扒|鸡扒\"")
-		log.Println("\tmeican_robot -u ***@qw.com -p 123123 -f 18 -dd \"辣|8勺\"  -dr \"抄手|丽华\" -pd \"猪扒|鸡扒\" -pr \"便当|煲仔饭\"")
+		log.Println("\tmeican_robot -u ***@qw.com -f 17 ")
+		log.Println("\tmeican_robot -u ***@qw.com -f 17 -p 123123")
+		log.Println("\tmeican_robot -u ***@qw.com -f 18 -dd \"辣|8勺\"   -p 123123")
+		log.Println("\tmeican_robot -u ***@qw.com -f 19 -dr \"抄手|丽华\" -p 123123")
+		log.Println("\tmeican_robot -u ***@qw.com -f 18 -dd \"辣|8勺\"   -dr \"抄手|丽华\" -pd \"猪扒|鸡扒\" -p 123123 ")
+		log.Println("\tmeican_robot -u ***@qw.com -f 18 -dd \"辣|8勺\"   -dr \"抄手|丽华\" -pd \"猪扒|鸡扒\" -pr \"便当|煲仔饭\" -p 123123 ")
 		log.Println("Params: ")
 		log.Println("\t-u    username ***@qw.com")
 		log.Println("\t-p    password 123123")
@@ -38,6 +43,20 @@ func main() {
 		log.Println("\t-pd   prefer_dish  \"猪扒|汤饭|寿司\"")
 		log.Println("\t-pr   prefer_restaurant  \"便当|煲仔饭\"")
 		log.Println("============================================")
+		return
+	}
+
+
+	pwdB, err := gopass.GetPasswdPrompt("请输入密码:", true, os.Stdin, os.Stdout)
+	if err != nil {
+		log.Fatalf("GetPasswdPrompt failed err=%v", err)
+	}
+	pwd := *p
+	if pwd==""{
+		pwd = string(pwdB)
+	}
+	if pwd==""{
+		log.Println("密码为空,退出")
 		return
 	}
 
@@ -53,7 +72,7 @@ func main() {
 		Floor:                     uint32(floor),
 	}
 	app := api.NewMeiCan(conf)
-	finalResult := app.RobotOrder(*u, *p)
+	finalResult := app.RobotOrder(*u, pwd)
 
 	log.Println("===============")
 	log.Println("最终点餐结果:")
