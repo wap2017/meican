@@ -233,10 +233,10 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 					RestaurantName:  rest.Name,
 					DishName:        dish.Name,
 					TabUniqueId:     tabUniqueId,
-					AddressUniqueId: addressList[conf.Floor-16].UniqueId,
+					AddressUniqueId: addressList[conf.Floor-17].UniqueId,
 					TargetTime:      targetTime,
 					DishId:          dish.ID,
-					Address:         addressList[conf.Floor-16].Address,
+					Address:         addressList[conf.Floor-17].Address,
 					PriceString:     dish.PriceString,
 					Title:           calendar.Title,
 				})
