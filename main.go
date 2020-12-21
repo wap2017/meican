@@ -22,7 +22,6 @@ func main() {
 	pr := flag.String("pr", "", "prefer_restaurant")
 	flag.Parse()
 
-
 	//log.Printf("%v", *f)
 	if *f != "17" && *f != "18" && *f != "19" ||
 		*u == "" {
@@ -46,16 +45,15 @@ func main() {
 		return
 	}
 
-
-	pwdB, err := gopass.GetPasswdPrompt("请输入密码:", true, os.Stdin, os.Stdout)
-	if err != nil {
-		log.Fatalf("GetPasswdPrompt failed err=%v", err)
-	}
 	pwd := *p
-	if pwd==""{
+	if pwd == "" {
+		pwdB, err := gopass.GetPasswdPrompt("请输入密码:", true, os.Stdin, os.Stdout)
+		if err != nil {
+			log.Fatalf("GetPasswdPrompt failed err=%v", err)
+		}
 		pwd = string(pwdB)
 	}
-	if pwd==""{
+	if pwd == "" {
 		log.Println("密码为空,退出")
 		return
 	}

@@ -294,6 +294,7 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 			log.Printf("下单成功🥳")
 			return c.DishName, true
 		} else {
+			log.Printf("addOrderRsp=%+v",addOrderRsp)
 			panic("下单失败🌚")
 		}
 	}
