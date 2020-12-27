@@ -9,7 +9,7 @@ meican_robot -u your_jor_number@qw.com -f 17
 ```
 
 
-![image](http://gitlab.tt19.com/lixurui/meican/wikis/uploads/1aa787ba2bd066bcbaa0914c40375729/image.png)
+![image](https://github.com/wap2017/meican/blob/main/images/robot1.png)
 
 
 ```sh
@@ -30,5 +30,5 @@ Usage:
  	-pr   prefer_restaurant  "便当|煲仔饭"
 ```
 
-![image](http://gitlab.tt19.com/lixurui/meican/wikis/uploads/7090a887e20bcc93b8ffce1a073d8111/image.png)
+![image](https://github.com/wap2017/meican/blob/main/images/robot2.png)
 
