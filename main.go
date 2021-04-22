@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"github.com/howeyc/gopass"
+	"github.com/wap2017/meican/api"
+	"github.com/wap2017/meican/config"
 	"log"
-	"mp.52tt.com/meican/api"
-	"mp.52tt.com/meican/config"
 	"os"
 	"strconv"
 	"strings"
