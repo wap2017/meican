@@ -1,4 +1,4 @@
-module mp.52tt.com/meican
+module github.com/wap2017/meican
 
 go 1.15
 
