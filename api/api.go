@@ -233,10 +233,10 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 					RestaurantName:  rest.Name,
 					DishName:        dish.Name,
 					TabUniqueId:     tabUniqueId,
-					AddressUniqueId: addressList[conf.Floor-17].UniqueId,
+					AddressUniqueId: addressList[conf.FloorInd].UniqueId,
 					TargetTime:      targetTime,
 					DishId:          dish.ID,
-					Address:         addressList[conf.Floor-17].Address,
+					Address:         addressList[conf.FloorInd].Address,
 					PriceString:     dish.PriceString,
 					Title:           calendar.Title,
 				})
@@ -294,7 +294,7 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 			log.Printf("下单成功🥳")
 			return c.DishName, true
 		} else {
-			log.Printf("addOrderRsp=%+v",addOrderRsp)
+			log.Printf("addOrderRsp=%+v", addOrderRsp)
 			panic("下单失败🌚")
 		}
 	}
@@ -302,7 +302,7 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 	return "", false
 }
 
-func (mc *MeiCan) RobotOrder(username, password string) string {
+func (mc *MeiCan) RobotOrder(username, password, location string) string {
 	log.Printf("正在登陆...🤓")
 	mc.Login(username, password)
 	log.Printf("正在查看订单...🔖")
@@ -332,23 +332,21 @@ func (mc *MeiCan) RobotOrder(username, password string) string {
 				continue
 			}
 
-			//跳过高志
-			if !strings.Contains(calendar.UserTab.Name, "星辉") {
-				continue
-			}
+			//location: 高志|星辉
+			if strings.Contains(calendar.UserTab.Name, location) {
+				//跳过已点餐
+				log.Printf("date:%v title:%v", order.Date, calendar.Title)
+				if calendar.CorpOrderUser.UniqueId != "" {
+					dishName := calendar.CorpOrderUser.RestaurantItemList[0].DishItemList[0].Dish.Name
+					line := fmt.Sprintf("当前时间date:%v title:%v 已点餐:【%v】...跳过...🦘", order.Date, calendar.Title, dishName)
+					mc.finalResult += line + "\n"
+					log.Println(line)
+					continue
+				}
 
-			//跳过已点餐
-			log.Printf("date:%v title:%v", order.Date, calendar.Title)
-			if calendar.CorpOrderUser.UniqueId != "" {
-				dishName := calendar.CorpOrderUser.RestaurantItemList[0].DishItemList[0].Dish.Name
-				line := fmt.Sprintf("当前时间date:%v title:%v 已点餐:【%v】...跳过...🦘", order.Date, calendar.Title, dishName)
-				mc.finalResult += line + "\n"
-				log.Println(line)
-				continue
-			}
-
-			if dishName, done := mc.OrderOneCalendar(order, calendar, mc.conf, bloomFilter); done {
-				bloomFilter[dishName] = true
+				if dishName, done := mc.OrderOneCalendar(order, calendar, mc.conf, bloomFilter); done {
+					bloomFilter[dishName] = true
+				}
 			}
 
 		}
