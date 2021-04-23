@@ -8,4 +8,5 @@ type Config struct {
 	//已废弃
 	//Floor    uint32 // 17|18|19
 	FloorInd uint32 //楼层地址的下标
+	Location string
 }

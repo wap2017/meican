@@ -37,12 +37,12 @@ func main() {
 		log.Println("Params: ")
 		log.Println("\t-u    username ***@qw.com")
 		log.Println("\t-p    password 123123")
-		log.Println("\t-fi    floor 楼层下标，（17-19）就是（0-2） （11）就是（0）")
+		log.Println("\t-fi   floor 楼层下标，（17-19）就是（0-2） （11）就是（0）")
 		log.Println("\t-dd   dislike_dish  \"辣|酸\"")
 		log.Println("\t-dr   dislike_restaurant  \"抄手|丽华\"")
 		log.Println("\t-pd   prefer_dish  \"猪扒|汤饭|寿司\"")
 		log.Println("\t-pr   prefer_restaurant  \"便当|煲仔饭\"")
-		log.Println("\t-loc location \"星辉|高志\"")
+		log.Println("\t-loc  location \"星辉|高志\"")
 		log.Println("============================================")
 		return
 	}
@@ -71,9 +71,10 @@ func main() {
 		PreferRestaurantWordList:  strings.Split(*pr, "|"),
 		//Floor:                     uint32(floor),
 		FloorInd: uint32(floorInd),
+		Location: *loc,
 	}
 	app := api.NewMeiCan(conf)
-	finalResult := app.RobotOrder(*u, pwd, *loc)
+	finalResult := app.RobotOrder(*u, pwd)
 
 	log.Println("===============")
 	log.Println("最终点餐结果:")

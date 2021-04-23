@@ -302,7 +302,7 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 	return "", false
 }
 
-func (mc *MeiCan) RobotOrder(username, password, location string) string {
+func (mc *MeiCan) RobotOrder(username, password string) string {
 	log.Printf("正在登陆...🤓")
 	mc.Login(username, password)
 	log.Printf("正在查看订单...🔖")
@@ -333,7 +333,7 @@ func (mc *MeiCan) RobotOrder(username, password, location string) string {
 			}
 
 			//location: 高志|星辉
-			if strings.Contains(calendar.UserTab.Name, location) {
+			if strings.Contains(calendar.UserTab.Name, mc.conf.Location) {
 				//跳过已点餐
 				log.Printf("date:%v title:%v", order.Date, calendar.Title)
 				if calendar.CorpOrderUser.UniqueId != "" {
