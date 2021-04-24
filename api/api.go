@@ -37,7 +37,7 @@ func NewMeiCan(conf config.Config) *MeiCan {
 	}
 }
 
-func (mc *MeiCan) Login(username, password string) {
+func (mc *MeiCan) Login(username, password string) bool {
 	m := map[string]string{"remember": "true"}
 	requestUrl := mc.buildUrl("preference/preorder/api/v2.0/oauth/token", m)
 	response, err := http.PostForm(requestUrl, url.Values{
@@ -48,10 +48,12 @@ func (mc *MeiCan) Login(username, password string) {
 		"username_type":          []string{"username"},
 	})
 	if err != nil {
-		log.Fatalf("err=%v", err)
+		log.Printf("err=%v", err)
+		return false
 	}
 	if response.StatusCode != 200 {
-		log.Fatalf("login falied,statusCode=%v", response.StatusCode)
+		log.Printf("login falied,statusCode=%v", response.StatusCode)
+		return false
 	}
 	defer response.Body.Close()
 
@@ -60,6 +62,7 @@ func (mc *MeiCan) Login(username, password string) {
 	//for _, cookie := range cookies {
 	//	log.Print("cookie:", cookie)
 	//}
+	return true
 }
 
 func (mc *MeiCan) ShowOrders(beginDate, endDate string) *module.OrderRsp {
@@ -304,7 +307,11 @@ func (mc *MeiCan) OrderOneCalendar(order module.DateListItem, calendar module.Ca
 
 func (mc *MeiCan) RobotOrder(username, password string) string {
 	log.Printf("正在登陆...🤓")
-	mc.Login(username, password)
+	isLogin := mc.Login(username, password)
+	if !isLogin {
+		return "账号名或者密码错误☹️"
+	}
+
 	log.Printf("正在查看订单...🔖")
 	orders := mc.ShowOrders(utils.GetStartDateAndEndDate())
 	log.Printf("正在检索日期...📆")
